@@ -17,7 +17,6 @@ parser.add_argument("--pw", type=str, required=False)
 parser.add_argument("--set-mining-timeout", type=int, dest="miningtimeout", required=False, default=300)
 parser.add_argument("--set-mining-cooldown", type=int, dest="miningcooldown", required=False, default=300)
 parser.add_argument("--debug", dest="debug", action="store_true")
-parser.add_argument("--force-login", dest="force_login", action="store_true", default=False)
 parser.add_argument("--no-force-miner", dest="force_miner", action="store_false", default=True)
 parser.add_argument("--mac", dest="mac", action="store_true", default=False)
 args = parser.parse_args()
@@ -53,25 +52,23 @@ logging.root.addHandler(stream_handler)
 logger.debug("Logging setup successfully!")
 logger.info(f"Process ID is {process_uid}.")
 
+# Path to Chromedriver
+driver_path = "./chromedriver"
 # Providing files path depending on OS (if --mac flag is provided)
 if args.mac:
-    # Path to Chromedriver
-    driver_path = "./chromedriver"
     # Path to Brave executable
-    brave_path = "./Brave.app/Contents/MacOS/Brave Browser"
+    brave_path = "./Brave Browser.app/Contents/MacOS/Brave Browser"
     # Path to popup disabler extension
-    popup_ext_path = "Extensions/jmphljmgnagblkombahigniilhnbadca/2.2_0"
+    popup_ext_path = "Extensions/popup-disabler/2.2_0"
     # Path to anticaptcha extension
-    anticaptcha_ext_path = "Extensions/lncaoejhfdpcafpkkcddpjnhnodcajfg/0.52_0"
+    anticaptcha_ext_path = "Extensions/anticaptcha/0.52_0"
 else:
-    # Path to Chromedriver
-    driver_path = "C:/Driver/chromedriver.exe"
     # Path to Brave executable
     brave_path = "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
     # Path to popup disabler extension
-    popup_ext_path = "C:/Extensions/jmphljmgnagblkombahigniilhnbadca/2.2_0"
+    popup_ext_path = "./Extensions/popup-disabler/2.2_0"
     # Path to anticaptcha extension
-    anticaptcha_ext_path = "C:/Extensions/lncaoejhfdpcafpkkcddpjnhnodcajfg/0.52_0"
+    anticaptcha_ext_path = "./Extensions/anticaptcha/0.52_0"
 
 # Setting browser's desired capabilities
 d = DesiredCapabilities.CHROME

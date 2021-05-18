@@ -33,7 +33,7 @@ This script:
 ### Install Python and dependencies
 *Skip this if you already have Python and the required dependencies installed*
 1. Install [Python](https://www.python.org/downloads/release/python-395/)
-   - If you're on Windows, be sure to check **Add Python to PATH** <br /> ![Checkbox](https://imgur.com/a/VocHxf4)
+   - If you're on Windows, be sure to check **Add Python to PATH** <br /> ![Checkbox](https://i.imgur.com/uF9TKnU.jpg)
 2. Open your Terminal (for macOS) / cmd (for Windows)
 3. Use the command `cd path/to/the/script`, replace `path/to/the/script` with the actual path to the folder where the script is located
 4. Type `python -m venv venv` to create the virtual environment

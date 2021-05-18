@@ -39,7 +39,7 @@ This script:
 4. Type `python -m venv venv` to create the virtual environment
 5. Activate the virtual environment
     - macOS: Use the command `source venv/bin/activate`
-    - Windows: Use the command `venv\Scpipts\activate`
+    - Windows: Use the command `venv\Scripts\activate`
 6. Install the dependencies by typing `pip3 install -r requirements.txt`
 
 ### Install and configure anticaptcha
@@ -58,7 +58,7 @@ This script:
 2. Use the command `cd path/to/the/script`, replace `path/to/the/script` with the actual path to the folder where the script is located
 3. Activate the virtual environment
     - macOS: Use the command `source venv/bin/activate`
-    - Windows: Use the command `venv\Scpipts\activate`
+    - Windows: Use the command `venv\Scripts\activate`
 4. Type the command `python main.py` and add the arguments depending on login method (see below)
 
 ###Available arguments

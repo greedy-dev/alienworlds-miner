@@ -1,7 +1,5 @@
 # Alien Worlds Automatic Miner
 
----
-
 ### A Python script made to automate mining on Alien Worlds
 
 This script:

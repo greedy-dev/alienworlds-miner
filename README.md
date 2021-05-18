@@ -62,64 +62,16 @@ This script:
 4. Type the command `python main.py` and add the arguments depending on login method (see below)
 
 ###Available arguments
-<table>
-   <tr>
-      <th><b>Argument</b></th>
-      <th><b>Value</b></th>
-      <th><b>Default</b></th>
-      <th><b>Required?</b></th>
-      <th><b>Description</b></th>
-   </tr>
-   <tr>
-      <th><code>--method</code></th>
-      <th><code>reddit</code> or <code>manual</code></th>
-      <th>-</th>
-      <th>Yes</th>
-      <th>Login method. <br /> If <code>reddit</code> is selected, the login is automatic. <br /> If <code>manual</code> is selected, you have 60 seconds to log in.</th>
-   </tr>
-   <tr>
-      <th><code>--login</code></th>
-      <th>String</th>
-      <th>-</th>
-      <th>If <code>reddit</code> login method is selected</th>
-      <th>Your Reddit username.</th>
-   </tr>
-   <tr>
-      <th><code>--pw</code></th>
-      <th>String</th>
-      <th>-</th>
-      <th>If <code>reddit</code> login method is selected</th>
-      <th>Your Reddit password.</th>
-   </tr>
-   <tr>
-      <th><code>--set-mining-timeout</code></th>
-      <th>Int</th>
-      <th>300</th>
-      <th>No</th>
-      <th>Resets mining by reloading the website if it took longer than specified amount (in seconds).</th>
-   </tr>
-   <tr>
-      <th><code>--set-mining-cooldown</code></th>
-      <th>Int</th>
-      <th>300</th>
-      <th>No</th>
-      <th>Cooldown between mining cycles in seconds (used if the script was unable to get this from website logs).</th>
-   </tr>
-   <tr>
-      <th><code>--mac</code></th>
-      <th>Bool</th>
-      <th>False</th>
-      <th>No</th>
-      <th>If specified, macOS executables' paths will be used. No value needs to be provided, just the argument. <br /> By default, Windows executables' paths will be used.</th>
-   </tr>
-   <tr>
-      <th><code>--debug</code></th>
-      <th>Bool</th>
-      <th>False</th>
-      <th>No</th>
-      <th>If specified, debug log will be output. By default, the level is INFO.</th>
-   </tr>
-</table>
+
+| Argument                | Value                | Default | Required?                            | Description                                                                                                                                                              |
+|:-----------------------:|:--------------------:|:-------:|:------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--method`              | `reddit` or `manual` | -       | Yes                                  | Login method. <br /> If reddit is selected, the login is automatic. <br /> If manual is selected, you have 60 seconds to log in.                                         |
+| `--login`               | String               | -       | If `reddit` login method is selected | Your Reddit username.                                                                                                                                                    |
+| `--pw`                  | String               | -       | If `reddit` login method is selected | Your Reddit password.                                                                                                                                                    |
+| `--set-mining-timeout`  | Int                  | 300     | No                                   | Resets mining by reloading the website if it took longer than specified amount (in seconds).                                                                             |
+| `--set-mining-cooldown` | Int                  | 300     | No                                   | Cooldown between mining cycles in seconds (used if the script was unable to get this from website logs).                                                                 |
+| `--mac`                 | Bool                 | False   | No                                   | If specified, macOS executables' paths will be used. No value needs to be provided, just the argument.  By default, Windows executables' paths will be used.             |
+| `--debug`               | Bool                 | False   | No                                   | If specified, debug log will be output. By default, the level is INFO.                                                                                                   |
 
 ### To run several accounts, open another terminal window and repeat the steps.
 

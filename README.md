@@ -54,7 +54,7 @@ This script:
     - Windows: Use the command `venv\Scripts\activate`
 4. Type the command `python main.py` and add the arguments depending on login method (see below)
 
-###Available arguments
+### Available arguments
 
 | Argument                | Value                | Default | Required?                            | Description                                                                                                                                                              |
 |:-----------------------:|:--------------------:|:-------:|:------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

@@ -58,17 +58,9 @@ driver_path = "./chromedriver"
 if args.mac:
     # Path to Brave executable
     brave_path = "./Brave Browser.app/Contents/MacOS/Brave Browser"
-    # Path to popup disabler extension
-    popup_ext_path = "Extensions/popup-disabler/2.2_0"
-    # Path to anticaptcha extension
-    anticaptcha_ext_path = "Extensions/anticaptcha/0.52_0"
 else:
     # Path to Brave executable
     brave_path = "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
-    # Path to popup disabler extension
-    popup_ext_path = "./Extensions/popup-disabler/2.2_0"
-    # Path to anticaptcha extension
-    anticaptcha_ext_path = "./Extensions/anticaptcha/0.52_0"
 
 # Setting browser's desired capabilities
 d = DesiredCapabilities.CHROME
@@ -87,8 +79,6 @@ option.binary_location = brave_path
 option.add_argument("--lang=en")
 # Disabling infobars
 option.add_argument("--disable-infobars")
-# Loading extensions
-option.add_argument(f"load-extension={popup_ext_path},{anticaptcha_ext_path}")
 
 # Initializing browser
 driver = webdriver.Chrome(executable_path=driver_path, options=option, desired_capabilities=d)
@@ -131,10 +121,7 @@ def preload():  # logs into wax.io
             logger.debug("Clicking Reddit login.")
             # Trying to click on reddit login button
             try:
-                driver.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div[4]/div/div[9]/button').click()
-                driver.find_element_by_xpath(
-                    '/html/body/div[1]/div/div/div[1]/div[1]/div/div[3]/div[1]/div[9]/button').click()
-                driver.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div[4]/div[1]/div[9]/button').click()
+                driver.find_element_by_id("reddit-social-btn").click()
             except:
                 # If the website is reddit
                 if driver.current_url.startswith("https://www.reddit.com/"):
@@ -363,6 +350,17 @@ def wait_for_mining_to_finish():
         for e in driver.get_log('browser'):
             if "end doWork" in e["message"]:
                 logger.info("Finished mining.")
+                # Clicking Claim button
+                # Claim button coordinates
+                x, y = 210, 200
+                logger.debug(f"Clicking at ({x}, {y}).")
+                # Clicking claim button
+                ActionChains(driver).move_by_offset(x, y).click().perform()
+                time.sleep(0.2)
+                logger.debug("Backing.")
+                # Moving cursor back to (0, 0)
+                ActionChains(driver).move_by_offset(-x, -y).perform()
+                time.sleep(5)
                 # Return True (Mined successfully)
                 return True
         time.sleep(0.6)
@@ -375,168 +373,6 @@ def wait_for_mining_to_finish():
     time.sleep(2)
     # Return False (Mining took too long, the page was reloaded)
     return False
-
-
-def get():  # Claims reward
-    logger.info("Claiming TLM.")
-    global size
-    # If the website opened (tab active) is not claiming confirmation page
-    if not driver.current_url.startswith("https://all-access.wax.io/"):
-        # Claim button coordinates
-        x, y = 210, 200
-        logger.debug(f"Resizing window to ({size[0]}, {size[1]}).")
-        # Resizing window
-        driver.set_window_size(size[0], size[1])
-        time.sleep(5)
-        logger.debug(f"Clicking at ({x}, {y}).")
-        # Clicking claim button
-        ActionChains(driver).move_by_offset(x, y).click().perform()
-        time.sleep(0.2)
-        logger.debug("Backing.")
-        # Moving cursor back to (0, 0)
-        ActionChains(driver).move_by_offset(-x, -y).perform()
-        time.sleep(10)
-
-    # Approving claim
-    while True:
-        _debugLog = driver.get_log('browser')
-        logger.debug("Changing active tab to transaction approval page.")
-        # Setting variable to current tab opened
-        approve_page = driver.current_window_handle
-        # If the tab is not confirmation page
-        if not driver.current_url.startswith("https://all-access.wax.io/"):
-            # Set the variable to another tab
-            for handle in driver.window_handles:
-                if handle != main_page:
-                    approve_page = handle
-        time.sleep(2)
-        # Switch to another tab
-        driver.switch_to.window(approve_page)
-        logger.debug(f"Resizing window to ({size[0]}, {size[1] * 2}).")
-        # Resize window
-        driver.set_window_size(size[0], size[1] * 2)
-        time.sleep(1)
-        # Set the variable to current tab opened
-        current_window = driver.current_window_handle
-
-        # Check if the website is claim confirmation page
-        while True:
-            logger.debug("Checking if the website is https://all-access.wax.io/")
-            # If the active tab is not all-access.wax.io
-            if not driver.current_url.startswith("https://all-access.wax.io/"):
-                logger.debug("The website is not https://all-access.wax.io/, switching tab.")
-                # Switch to another tab
-                for handle in driver.window_handles:
-                    if handle != current_window:
-                        driver.switch_to.window(handle)
-            # If the active tab is all-access.wax.io
-            else:
-                logger.debug("The website is https://all-access.wax.io/, breaking loop.")
-                # Break the loop
-                break
-            time.sleep(1)
-
-        # Checking captcha completion
-        while True:
-            # Try to check for captcha solving status
-            try:
-                logger.debug("Trying to check for captcha completion.")
-                captcha = driver.find_element_by_class_name('status').text
-                # If the captcha is solved
-                if captcha == "Solved":
-                    logger.debug("Captcha solved. Continuing.")
-                    # Break the loop
-                    break
-                # If the captcha is outdated
-                elif captcha == "Outdated, should be solved again":
-                    logger.debug("Captcha is outdated, re-solving.")
-                    # Click the button to re-solve it
-                    driver.find_element_by_xpath(
-                        "/html/body/div[1]/div/section/div[2]/div/div[5]/div/div/div/div[2]/a[2]").click()
-            # If the script was unable to find captcha status field
-            except:
-                # Repeat the cycle
-                pass
-            time.sleep(3)
-
-        approve_button = driver.find_element_by_xpath("/html/body/div[1]/div/section/div[2]/div/div[6]/button")
-        logger.debug("Clicking the 'Approve' button.")
-        # Click the approve button
-        approve_button.click()
-        time.sleep(3)
-        logger.debug("Switching back to the Alien Worlds tab.")
-        # Switch back to alien worlds
-        driver.switch_to.window(main_page)
-        error = False
-        logger.debug("Checking site logs for 'Expired transaction' error.")
-        # Check the logs for expired transaction error
-        for e in driver.get_log('browser'):
-            if "expired transaction" in e["message"]:
-                error = True
-                break
-
-        # If no error occurred
-        if not error:
-            t = 0
-            # Try to check logs for claiming result for 30 seconds, otherwise continue
-            while t < 30:
-                # Check the logs for successful claiming message
-                for e in driver.get_log('browser'):
-                    if "Claiming Done" in e["message"]:
-                        break
-                time.sleep(1)
-                t += 1
-            logger.info(f"Successfully claimed TLM.")
-            global cooldown
-            logger.debug("Trying to get time until next mine from logs.")
-            s = ""
-            t = 0
-            # Trying to check logs for time until next mining cycle for 20 seconds
-            while t < 20:
-                for e in driver.get_log('browser'):
-                    if "until next mine" in e["message"]:
-                        s = e["message"]
-                        break
-                time.sleep(0.6)
-                t += 0.6
-            # TODO Add checking for mined amount
-            # If the time until next mine string is not blank
-            if s != "":
-                # Get ms from the string
-                cooldown = int(s[s.find("mine ") + 5:s.find("\"'")]) / 1000
-            # Otherwise
-            else:
-                logger.warning(
-                    f"Failed to get time until next mine from logs. Setting to {args.miningcooldown} seconds.")
-                # Use pre-set cooldown
-                cooldown = args.miningcooldown
-            break
-
-        # If the transaction has expired
-        logger.warning("Expired transaction. Trying again to claim TLM.")
-        time.sleep(5)
-        logger.debug(f"Resizing window to ({size[0]}, {size[1]}).")
-        # Resize window
-        driver.set_window_size(size[0], size[1])
-        time.sleep(2)
-        logger.debug(f"Reloading the page.")
-        # Reload the page
-        driver.refresh()
-        logger.debug("Page reloaded.")
-        # Login to alien worlds
-        login()
-        # Enter mining menu
-        miner(args.force_miner)
-        # Claim button coordinates
-        x, y = 250, 275
-        logger.debug(f"Clicking at ({x}, {y}).")
-        # Click the claim button
-        ActionChains(driver).move_by_offset(x, y).click().perform()
-        time.sleep(0.2)
-        logger.debug(f"Backing.")
-        # Move the cursor back to (0, 0)
-        ActionChains(driver).move_by_offset(-x, -y).perform()
-        time.sleep(5)
 
 
 def start_new_cycle():  # Starts another cycle
@@ -585,8 +421,6 @@ def main():
                 mining_started = mine()
             # Wait for mining to finish, check if it didn't time out
             mining_completed = wait_for_mining_to_finish()
-        # Claim TLM
-        get()
         # End the cycle
         end()
         # Start another cycle
